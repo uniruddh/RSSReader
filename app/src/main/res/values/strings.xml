@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RSS Reader</string>
+    <string name="title_article">Article</string>
+    <string name="title_starred">Starred</string>
+    <string name="title_feed">Feed</string>
+
+    <string name="title">Title</string>
+    <string name="url">Url</string>
+</resources>
