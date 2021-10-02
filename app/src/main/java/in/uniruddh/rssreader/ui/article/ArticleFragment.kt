@@ -1,18 +1,15 @@
 package `in`.uniruddh.rssreader.ui.article
 
 import `in`.uniruddh.rssreader.R
-import `in`.uniruddh.rssreader.data.remote.ArticleSyncWorker
 import `in`.uniruddh.rssreader.databinding.ArticleFragmentBinding
 import `in`.uniruddh.rssreader.ui.ArticleDetailActivity
 import `in`.uniruddh.rssreader.ui.generic.GenericFragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -23,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ArticleFragment : GenericFragment<ArticleFragmentBinding>() {
 
-    val viewModel: ArticleViewModel by viewModels()
+    private val viewModel by activityViewModels<ArticleViewModel>()
 
     override fun getLayoutId(): Int = R.layout.article_fragment
 
@@ -37,7 +34,6 @@ class ArticleFragment : GenericFragment<ArticleFragmentBinding>() {
         }
 
         setupAdapter()
-        setupWorker()
     }
 
     private fun setupAdapter() {
@@ -74,14 +70,4 @@ class ArticleFragment : GenericFragment<ArticleFragmentBinding>() {
         })
     }
 
-    private fun setupWorker() {
-        val workManager = WorkManager.getInstance(requireContext())
-        val workRequest = OneTimeWorkRequest.Builder(ArticleSyncWorker::class.java).build()
-        workManager.enqueue(workRequest)
-        workManager.getWorkInfoByIdLiveData(workRequest.id).observe(viewLifecycleOwner, {
-            if (it.state.isFinished) {
-                viewModel.getArticles()
-            }
-        })
-    }
 }

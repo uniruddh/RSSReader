@@ -22,9 +22,9 @@ class ArticleAdapter() :
     val onStarArticleClicked = MutableLiveData<Article>()
     val onShareArticleClicked = MutableLiveData<String>()
 
-    private var articleList: ArrayList<Article> = arrayListOf()
+    private var articleList: List<Article> = arrayListOf()
 
-    fun refreshList(list: ArrayList<Article>) {
+    fun refreshList(list: List<Article>) {
         this.articleList = list
         notifyDataSetChanged()
     }

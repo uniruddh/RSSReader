@@ -1,4 +1,4 @@
-package `in`.uniruddh.rssreader.ui.starred
+package `in`.uniruddh.rssreader.ui.article
 
 import `in`.uniruddh.rssreader.R
 import `in`.uniruddh.rssreader.databinding.StarredFragmentBinding
@@ -7,7 +7,7 @@ import `in`.uniruddh.rssreader.ui.generic.GenericFragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class StarredFragment : GenericFragment<StarredFragmentBinding>() {
 
-    private val viewModel: StarredViewModel by viewModels()
+    private val viewModel by activityViewModels<ArticleViewModel>()
 
     override fun getLayoutId(): Int = R.layout.starred_fragment
 
@@ -33,7 +33,7 @@ class StarredFragment : GenericFragment<StarredFragmentBinding>() {
     }
 
     private fun setupAdapter() {
-        val articleAdapter = StarredAdapter()
+        val articleAdapter = ArticleAdapter()
         binding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.articleRecyclerView.adapter = articleAdapter
         binding.articleRecyclerView.addItemDecoration(

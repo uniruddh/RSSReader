@@ -2,12 +2,14 @@ package `in`.uniruddh.rssreader.ui.article
 
 import `in`.uniruddh.rssreader.data.local.entity.Article
 import `in`.uniruddh.rssreader.data.repository.ArticleRepository
+import `in`.uniruddh.rssreader.utils.Utils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -17,19 +19,36 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
+    private val workManager: WorkManager
 ) : ViewModel() {
 
-    val articleList = MutableLiveData<ArrayList<Article>>()
+    val articleList = MutableLiveData<List<Article>>()
+    val starredArticleList = MutableLiveData<List<Article>>()
 
     init {
+        syncArticles()
         getArticles()
+        getStarredArticles()
+    }
+
+    private fun syncArticles() {
+        workManager.enqueue(Utils.getArticleSyncRequest())
     }
 
     fun getArticles() {
         viewModelScope.launch {
-            val list = articleRepository.getArticles().toCollection(ArrayList())
-            articleList.postValue(list)
+            articleRepository.getArticles().collect {
+                articleList.postValue(it)
+            }
+        }
+    }
+
+    fun getStarredArticles() {
+        viewModelScope.launch {
+            articleRepository.getStarredArticles().collect {
+                starredArticleList.postValue(it)
+            }
         }
     }
 

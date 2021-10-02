@@ -4,6 +4,7 @@ import `in`.uniruddh.rssreader.BuildConfig
 import `in`.uniruddh.rssreader.data.local.MainDatabase
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -70,4 +71,9 @@ object MainModule {
     fun provideMoshi(): Moshi = Moshi.Builder()
         .addLast(KotlinJsonAdapterFactory())
         .build()
+
+    @Singleton
+    @Provides
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager =
+        WorkManager.getInstance(context)
 }

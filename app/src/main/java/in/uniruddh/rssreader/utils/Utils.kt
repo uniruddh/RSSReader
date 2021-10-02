@@ -1,7 +1,12 @@
 package `in`.uniruddh.rssreader.utils
 
+import `in`.uniruddh.rssreader.data.remote.ArticleSyncWorker
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * @Author: Aniruddh Bhilvare
@@ -41,5 +46,15 @@ object Utils {
             }
         }
         return ""
+    }
+
+    fun getArticleSyncRequest(): OneTimeWorkRequest {
+        return OneTimeWorkRequest.Builder(ArticleSyncWorker::class.java)
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build()
+            )
+            .build()
     }
 }

@@ -40,58 +40,50 @@ class ArticleRepository @Inject constructor(
 
         val feeds = feedDao.getFeeds()
         feeds.forEach { feed ->
-            feed.feedUrl.let { feedUrl ->
-                try {
-                    val request = Request.Builder()
-                        .url(feedUrl)
-                        .build()
+            try {
+                val request = Request.Builder()
+                    .url(feed.feedUrl)
+                    .build()
 
-                    val response = okHttpClient.newCall(request).execute()
+                val response = okHttpClient.newCall(request).execute()
 
-                    if (response.isSuccessful && response.body != null) {
-                        val xmlToJson = XmlToJson.Builder(response.body!!.string()).build().toJson()
-                        xmlToJson?.let { jsonObject ->
-                            val rss = jsonObject.getJSONObject("rss")
-                            val channel = rss.getJSONObject("channel")
-                            val item = channel.getJSONArray("item")
-                            val channelItmes = jsonAdapter.fromJson(item.toString())
-                            channelItmes?.forEach { items ->
+                if (response.isSuccessful && response.body != null) {
+                    val xmlToJson = XmlToJson.Builder(response.body!!.string()).build().toJson()
+                    xmlToJson?.let { jsonObject ->
+                        val rss = jsonObject.getJSONObject("rss")
+                        val channel = rss.getJSONObject("channel")
+                        val item = channel.getJSONArray("item")
+                        val channelItems = jsonAdapter.fromJson(item.toString())
+                        channelItems?.forEach { items ->
 
-                                items.title?.let { title ->
-                                    if (!articleDao.isExist(title)) {
-                                        val article = Article()
-                                        article.title = title
-                                        article.url = items.link
-                                        article.feedTitle = feed.feedTitle
-                                        article.author = items.creator
-                                        article.dateTime = items.updated
-                                        article.imageUrl = items.encoded?.substringAfter("src=\"")
-                                            ?.substringBefore("\"")
+                            items.title?.let { itemTitle ->
+                                if (!articleDao.isExist(itemTitle)) {
+                                    val imgUrl = items.encoded?.substringAfter("src=\"")
+                                        ?.substringBefore("\"")
 
-                                        insertArticle(article)
+                                    val article = Article().apply {
+                                        title = itemTitle
+                                        url = items.link
+                                        feedTitle = feed.feedTitle
+                                        author = items.creator
+                                        dateTime = items.updated
+                                        imageUrl = imgUrl
                                     }
+                                    articleDao.insert(article)
                                 }
                             }
                         }
                     }
-                } catch (e: Exception) {
-
                 }
+            } catch (e: Exception) {
+
             }
         }
     }
 
-    suspend fun getArticles() = withContext(Dispatchers.IO) {
-        articleDao.getArticles()
-    }
+    fun getArticles() = articleDao.getArticles()
 
-    suspend fun getStarredArticles() = withContext(Dispatchers.IO) {
-        articleDao.getStarredArticles()
-    }
-
-    suspend fun insertArticle(article: Article) = withContext(Dispatchers.IO) {
-        articleDao.insert(article)
-    }
+    fun getStarredArticles() = articleDao.getStarredArticles()
 
     suspend fun updateArticle(article: Article) = withContext(Dispatchers.IO) {
         articleDao.update(article)

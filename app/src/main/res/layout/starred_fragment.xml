@@ -9,13 +9,13 @@
 
         <variable
             name="viewModel"
-            type="in.uniruddh.rssreader.ui.starred.StarredViewModel" />
+            type="in.uniruddh.rssreader.ui.article.ArticleViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.starred.StarredFragment">
+        tools:context=".ui.article.StarredFragment">
 
         <LinearLayout
             android:layout_width="300dp"

@@ -1,7 +1,6 @@
 package `in`.uniruddh.rssreader.ui.feed
 
 import `in`.uniruddh.rssreader.data.local.entity.Feed
-import `in`.uniruddh.rssreader.data.remote.ArticleSyncWorker
 import `in`.uniruddh.rssreader.databinding.FeedAddDialogBinding
 import `in`.uniruddh.rssreader.utils.toastShort
 import android.os.Bundle
@@ -12,8 +11,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -64,8 +61,7 @@ class FeedDialogFragment : DialogFragment() {
                 viewModel.insertFeed(feed)
                 dismiss()
 
-                val worker = OneTimeWorkRequest.Builder(ArticleSyncWorker::class.java)
-                WorkManager.getInstance(requireContext()).enqueue(worker.build())
+                viewModel.syncArticles()
             }
         }
     }
