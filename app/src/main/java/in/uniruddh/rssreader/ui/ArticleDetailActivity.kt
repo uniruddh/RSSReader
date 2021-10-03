@@ -31,6 +31,9 @@ class ArticleDetailActivity : AppCompatActivity() {
                     view: WebView?,
                     request: WebResourceRequest?
                 ): Boolean {
+                    if (request?.url.toString() == articleUrl) {
+                        view?.loadUrl(articleUrl)
+                    }
                     return true
                 }
             }

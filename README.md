@@ -1,13 +1,31 @@
 
-RSS Reader
-===============================
+# RSS Reader
+Simple RSS Reader app demonstrating usage of various android architecture components.
 
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/1.png)
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/2.png)
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/3.png)
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/4.png)
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/5.png)
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/6.png)
-![ScreenShot](https://raw.github.com/uniruddh/RSSReader/master/mockups/7.png)
+## Libraries
+- Kotlin
+    - Coroutines
+    - Flow
+- Android Jetpack
+    - Activity
+    - Appcompact
+    - Data Binding
+    - Fragment
+    - Hilt
+    - Lifecycle
+    - Navigation
+    - Recycler View
+    - Room
+    - Work
+- Third party
+    - Glide
+    - Moshi
+    - Okhttp
+    - XmlToJson
 
+## Demo
+![Demo](https://raw.github.com/uniruddh/RSSReader/master/mockups/demo.gif)
+
+## Author
+- Aniruddh Bhilvare
 
